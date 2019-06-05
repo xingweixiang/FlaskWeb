@@ -34,7 +34,7 @@ X = np.concatenate((c1, c2),)
 pp1= ax.scatter(c1[:,0], c1[:,1],cmap='prism',s=50,color='r')
 pp2= ax.scatter(c2[:,0], c2[:,1],cmap='prism',s=50,color='g')
 ax.legend((pp1,pp2),('class 1', 'class2'),fontsize=35)
-fig.savefig('classes.png')
+fig.savefig('tmp/classes.png')
 
 
 #start figure
@@ -95,7 +95,7 @@ axis4.set_xlabel('x',fontsize=40)
 axis4.set_title('hierarchical ward',fontsize=20)
 
 fig.set_size_inches(18.5,10.5)
-fig.savefig('comp_clustering.png', dpi=100)
+fig.savefig('tmp/comp_clustering.png', dpi=100)
 
 fig.clf()#reset plt
 fig = plt.figure(figsize=(20,15))
@@ -110,7 +110,7 @@ dendrogram(
     leaf_font_size=12.,
     show_contracted=True,  # to get a distribution impression in truncated branches
 )
-fig.savefig('dendrogram.png')
+fig.savefig('tmp/dendrogram.png')
 #plt.show()
 
 
