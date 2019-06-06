@@ -8,14 +8,13 @@ from sklearn.cluster import MeanShift
 from matplotlib import pyplot as plt
 # generate two clusters: a with 100 points, b with 50:
 np.random.seed(4711)  # for repeatability 
-c1 = np.random.multivariate_normal([10, 0], [[3, 1], [1, 4]], size=[100,])
+c1 = np.random.multivariate_normal([10, 0], [[3, 1], [1, 4]], size=[100,])#生成一个多元正态分布矩阵
 l1 = np.zeros(100)
 l2 = np.ones(100)
-c2 = np.random.multivariate_normal([0, 10], [[3, 1], [1, 4]], size=[100,])
-
+c2 = np.random.multivariate_normal([0, 10], [[3, 1], [1, 4]], size=[100,])#生成一个多元正态分布矩阵
 print (c1.shape)
 #add noise:
-np.random.seed(1)  # for repeatability 
+np.random.seed(1)  # for repeatability 设随机数种子，生成的随机数结果相同
 noise1x = np.random.normal(0,2,100)
 noise1y = np.random.normal(0,8,100)
 noise2 = np.random.normal(0,8,100)
@@ -25,23 +24,23 @@ c2[:,1] += noise2
 
 #
 fig = plt.figure(figsize=(20,15))
-ax = fig.add_subplot(111)
+ax = fig.add_subplot(111)#1×1网格，第一子图
 ax.set_xlabel('x',fontsize=30)
 ax.set_ylabel('y',fontsize=30)
 fig.suptitle('classes',fontsize=30)
-labels = np.concatenate((l1,l2),)
+labels = np.concatenate((l1,l2),)#数组拼接
 X = np.concatenate((c1, c2),)
-pp1= ax.scatter(c1[:,0], c1[:,1],cmap='prism',s=50,color='r')
+pp1= ax.scatter(c1[:,0], c1[:,1],cmap='prism',s=50,color='r')#散点图
 pp2= ax.scatter(c2[:,0], c2[:,1],cmap='prism',s=50,color='g')
-ax.legend((pp1,pp2),('class 1', 'class2'),fontsize=35)
+ax.legend((pp1,pp2),('class 1', 'class2'),fontsize=35)#legend，把多个图放一起
 fig.savefig('tmp/classes.png')
 
 
 #start figure
-fig.clf()#reset plt
+fig.clf()#reset plt 清除整个当前数字。
 fig, ((axis1, axis2), (axis3, axis4)) = plt.subplots(2, 2, sharex='col', sharey='row')
 
-#k-means
+#k-means 聚类算法,又称为k-均值算法
 kmeans = KMeans(n_clusters=2)
 kmeans.fit(X)
 pred_kmeans = kmeans.labels_
@@ -56,19 +55,19 @@ axis1.set_title('k-means',fontsize=20)
 #plt.show()
 
 
-#mean-shift
+#mean-shift 均值漂移,是一种基于密度的聚类算法
 ms = MeanShift(bandwidth=7)
 ms.fit(X)
 pred_ms = ms.labels_
 axis2.scatter(X[:,0], X[:,1], c=pred_ms, cmap='prism')
 axis2.set_title('mean-shift',fontsize=20)
 
-print ('ms:',metrics.homogeneity_completeness_v_measure(labels,pred_ms))
-print ('ms:',np.unique(ms.labels_))
+print ('ms:',metrics.homogeneity_completeness_v_measure(labels,pred_ms))#评价
+print ('ms:',np.unique(ms.labels_))#去重
 
 #gaussian
 #g = mixture.GMM(n_components=2)
-g = mixture.GaussianMixture(n_components=2)
+g = mixture.GaussianMixture(n_components=2)#高斯混合模型
 g.fit(X)
 print (g.means_ )
 pred_gmm = g.predict(X)
@@ -82,7 +81,7 @@ axis3.set_title('gaussian mixture',fontsize=20)
 
 #hierarchical
 # generate the linkage matrix
-Z = linkage(X, 'ward')
+Z = linkage(X, 'ward')#层次聚类
 max_d = 20
 pred_h = fcluster(Z, max_d, criterion='distance')
 print ('clusters:',np.unique(pred_h))

@@ -25,7 +25,7 @@ plt.text(70, 110, r'$v^1$', fontsize=20)
 #plt.show()
 
 fig.suptitle('2 dimensional dataset',fontsize=40)
-fig.savefig('pca_data.png')
+fig.savefig('tmp/pca_data.png')
 
 
 #calc PCA
@@ -55,7 +55,7 @@ from sklearn.decomposition import PCA
 X = np.array([u_x,u_y])
 X = X.T
 #print X
-pca = PCA(n_components=1)
+pca = PCA(n_components=1)#主成分分析
 pca.fit(X)
 V = pca.components_
 print (V,'-',V[0][1]/V[0][0])
