@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
-
+plt.rcParams['font.sans-serif'] = ['SimHei'] # 步骤一（替换sans-serif字体）
+plt.rcParams['axes.unicode_minus'] = False   # 步骤二（解决坐标轴负数的负号显示问题）
 #line y = 2*x
 x = np.arange(1,101,1).astype(float)
 y = 5*np.arange(1,101,1).astype(float)
@@ -24,7 +25,7 @@ plt.arrow(60, 100,10-0, 20-0,head_width=2.5, head_length=2.5, fc='k', ec='k')
 plt.text(70, 110, r'$v^1$', fontsize=20)
 #plt.show()
 
-fig.suptitle('2 dimensional dataset',fontsize=40)
+fig.suptitle('主成分分析',fontsize=40)
 fig.savefig('tmp/pca_data.png')
 
 
