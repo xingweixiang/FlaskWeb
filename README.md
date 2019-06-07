@@ -15,6 +15,12 @@ web机器学习
 		* [1、聚类算法](#1聚类算法)
 	* [三、有监督机器学习](#三有监督机器学习)
 		* [1、常见监督式学习算法](#1常见监督式学习算法)
+	* [四、Flask](#四Flask)
+		* [1、虚拟环境](#1虚拟环境)
+		* [2、程序的基本结构](#2程序的基本结构)
+		* [3、模板](#3模板)
+		* [4、Web表单](#4Web表单)
+		* [5、蓝图Blueprint](#5蓝图Blueprint)
 ### 一、web框架
 - web框架是表示一组库和模块的开发框架，用来支持动态网站、网络应用程序及网络服务的开发。
 ### 1、常用Web框架
@@ -177,3 +183,90 @@ fig.savefig('tmp/pca_data.png')
 监督式学习的常见应用场景如分类问题和回归问题。
 ### 1、常见监督式学习算法
 - 有决策树学习(ID3,C4.5等)，朴素贝叶斯分类，最小二乘回归，逻辑回归（Logistic Regression），支持向量机，集成方法以及反向传递神经网络（Back Propagation Neural Network）等等
+## 四、[Flask](/example/chapter_4)
+### 1、虚拟环境
+- 虚拟环境可以为每一个项目安装独立的 Python 库，这样就可以隔离不同项目之间的 Python 库，也可以隔离项目与操作系统之间的 Python 库。
+### 2、程序的基本结构
+- 初始化
+```
+from flask import Flask
+app = Flask(__name__)#实例化一个Flask对象
+```
+- 路由和视图函数：@app.route修饰器把函数注册为路由，并可传参数。
+```
+@app.route('/hello/<name>')
+def hello_name(name):
+   return 'Hello %s!' % name
+```
+- 启动
+```
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)#host='0.0.0.0'，允许外网访问，端口为80
+```
+- 请求-响应
+```
+from flask import Flask, request, redirect, url_for
+app = Flask(__name__)
+@app.route('/login',methods = ['POST', 'GET'])
+def login():
+   if request.method == 'POST':
+      user = request.form['nm']
+      return redirect(url_for('success',name = user))
+   else:
+      user = request.args.get('nm')
+      return redirect(url_for('success',name = user))
+```
+### 3、模板
+- Jinja2模板引擎
+```
+from flask import Flask, render_template
+app = Flask(name)
+@app.route('/result')
+def result():
+   dict = {'phy':50,'che':60,'maths':70}
+   return render_template('result.html', result = dict)
+```
+- 使用Flask-Bootstrap可以集成Twitter Bootstrap。可使用pip安装：pip install flask-bootstrap
+- 静态文件：默认设置下，Flask会在目录为static的子目录找静态文件。静态文件index.html的HTML脚本如下所示
+```
+<html>
+   <head>
+      <script type = "text/javascript" 
+         src = "{{ url_for('static', filename = 'hello.js') }}" ></script>
+   </head>
+   <body>
+      <input type = "button" onclick = "sayHello()" value = "Say Hello" />
+   </body> 
+</html>
+```
+### 4、Web表单
+- Flask 将表单数据发送到模板。'/' URL会呈现具有表单的网页（student.html）。<br>
+填入的数据会发布到触发 result()函数的'/result' URL。<br>
+results()函数收集字典对象中的request.form中存在的表单数据，并将其发送给result.html。<br>
+该模板动态呈现表单数据的HTML表格。
+```
+from flask import Flask, render_template, request
+app = Flask(name)
+@app.route('/')
+def student():
+   return render_template('student.html')
+@app.route('/result',methods = ['POST', 'GET'])
+def result():
+   if request.method == 'POST':
+      result = request.form
+      return render_template("back_result.html",result = result)
+```
+### 5、蓝图Blueprint
+- 蓝图就是一个存储操作路由映射方法的容器，主要用来实现客户端请求和URL相互关联的功能。 在Flask中，使用蓝图可以帮助我们实现模块化应用的功能。
+```
+#创建蓝图对象
+#Blueprint必须指定两个参数，admin表示蓝图的名称，__name__表示蓝图所在模块
+auth = Blueprint('auth', __name__)
+#注册蓝图路由
+@auth.route('/')
+def admin_index():
+    return 'admin_index'
+#在程序实例中注册该蓝图
+#url_prefix是指在定义视图函数url前面加上/auth才能访问该视图函数
+app.register_blueprint(auth,url_prefix='/auth')
+```
