@@ -1,14 +1,9 @@
-# webMachineLearning
-web机器学习
+web学习
 =========
 ## 运行环境
      python 3.7.*
-## requirements
-    numpy
-    pandas
-    matplotlib
 ## 目录
-* [web机器学习](#web机器学习)
+* [web学习](#web学习)
 	* [一、web框架](#一web框架)
 		* [1、常用Web框架](#1常用Web框架)
 	* [二、无监督机器学习](#二无监督机器学习)
